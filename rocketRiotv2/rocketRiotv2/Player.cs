@@ -57,8 +57,10 @@ namespace rocketRiotv2
             Canvas.SetBottom(playerSprite, yPosition);
             Canvas.SetLeft(playerSprite, xPosition);
 
-            hitBox.Stroke = Brushes.Red;
+            //hitBox.Stroke = Brushes.Red;
             hitBox.StrokeThickness = 2;
+            hitBox.FillRule = FillRule.EvenOdd;
+            hitBox.Fill = Brushes.Transparent;
             StreamReader sr = new StreamReader("playerPoints.txt");
             List<Point> points = new List<Point>();
             while (!sr.EndOfStream)
@@ -152,9 +154,17 @@ namespace rocketRiotv2
         {
 
         }
-        public bool intersectWith(Rectangle input)
+        public bool intersectWith(PointCollection hits)
         {
-            return true;
+            bool hitTrue = false;
+            for (int i = 0; i < hits.Count; i++)
+            {
+                if (canvas.InputHitTest(hits[i]) == hitBox)
+                {
+                    hitTrue = true;
+                }
+            }
+            return hitTrue;
         }
         public bool pastScreen()
         {
@@ -182,9 +192,9 @@ namespace rocketRiotv2
             canvas.Children.Remove(hitBox);
             canvas.Children.Add(hitBox);
         }
-        public bool collision(Point[] points)
+        public bool collision(Point point)
         {
-            return canvas.InputHitTest(points[0]) == playerSprite;
+            return canvas.InputHitTest(point) == playerSprite;
         }
     }
 }

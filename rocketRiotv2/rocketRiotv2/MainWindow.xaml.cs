@@ -29,7 +29,7 @@ namespace rocketRiotv2
         public MainWindow()
         {
             InitializeComponent();
-            player = new Player(0, 300, 6, 0, canvas);
+            player = new Player(0, 300, 6, 0, playerCanvas);
             zappers = new Zapper(canvas, random);
             zappers.generate();
             SoundPlayer sp = new SoundPlayer("Rocket Man Soundtrack.wav");
@@ -51,9 +51,35 @@ namespace rocketRiotv2
             {
                 zappers.generate();
             }
-            if (zappers.containsSpinner())
+            /*if (zappers.containsSpinner())
             {
                 zappers.spin();
+            }
+            if (player.intersectWith(zappers.locations()))
+            {
+                MessageBox.Show("You lose");
+            }
+            if (player.collision(Mouse.GetPosition(canvas)))
+            {
+                MessageBox.Show("You lose");
+            }*/
+            /*Rectangle test = new Rectangle();
+            test.Fill = Brushes.Red;
+            //Canvas.SetTop(test, zappers.locations()[0].Y);
+            //Canvas.SetLeft(test, zappers.locations()[0].X);
+            Canvas.SetTop(test, 100);
+            Canvas.SetLeft(test, 100);
+            test.Height = 10;
+            test.Width = 10;
+            canvas.Children.Add(test);
+            lblOutput.Text = Mouse.GetPosition(canvas) + "\n" + zappers.locations()[0] + "\n" + playerCanvas.InputHitTest(new Point(100, 100));
+            if (player.collision(new Point (100, 100)))
+            {
+                MessageBox.Show("You lose");
+            }*/
+            if (player.intersectWith(zappers.locations()))
+            {
+                MessageBox.Show("You lose");
             }
         }
     }

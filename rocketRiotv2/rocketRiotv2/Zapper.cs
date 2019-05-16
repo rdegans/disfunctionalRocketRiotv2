@@ -34,8 +34,8 @@ namespace rocketRiotv2
             for (int i = 0; i < 4; i++)
             {
                 zappers[i] = new Rectangle();
-                zappers[i].Width = 300;
-                zappers[i].Height = 300;
+                zappers[i].Width = 200;
+                zappers[i].Height = 200;//change back
             }
         }
         public void generate()
@@ -53,7 +53,7 @@ namespace rocketRiotv2
                 {
 
                 }
-                if (rand.Next(2) == 1)
+                if (true)//rand.Next(2) == 1)
                 {
                     bitmapImage = new BitmapImage(new Uri("zapper.png", UriKind.Relative));
                     spritefill = new ImageBrush(bitmapImage);
@@ -82,14 +82,17 @@ namespace rocketRiotv2
                     PointCollection myPointCollection = new PointCollection();
                     for (int i2 = 0; i2 < 5; i2++)
                     {
-                        myPointCollection.Add(new Point(Canvas.GetLeft(zappers[i]), Canvas.GetBottom(zappers[i]) + i2 * 5));
+                        myPointCollection.Add(new Point(0, i2 * (-30)));
                     }
                     hitPoints[i] = new Polyline();
                     hitPoints[i].Points = myPointCollection;
                     hitPoints[i].Stroke = Brushes.Red;
                     hitPoints[i].StrokeThickness = 2;
+                    Canvas.SetTop(hitPoints[i], 519 - Canvas.GetBottom(zappers[i]));
+                    Canvas.SetLeft(hitPoints[i], 101 + Canvas.GetLeft(zappers[i]));
+                    canvas.Children.Add(zappers[i]);
                     canvas.Children.Add(hitPoints[i]);
-                    if (rand.Next(11) == 1)
+                    if (rand.Next(11) == 12)//fix
                     {
                         spinner = i;
                     }
@@ -99,10 +102,10 @@ namespace rocketRiotv2
                         zappers[i].RenderTransformOrigin = new Point(0.5, 0.5);
                         zappers[i].RenderTransform = rotate;
                         RotateTransform rotate2 = new RotateTransform(orientation);
-                        hitPoints[i].RenderTransformOrigin = new Point(0.5, 0.5);
+                        rotate2.CenterX = 0;
+                        rotate2.CenterY = -60;
                         hitPoints[i].RenderTransform = rotate2;
                     }
-                    canvas.Children.Add(zappers[i]);
                 }
             }
         }
@@ -121,11 +124,48 @@ namespace rocketRiotv2
         {
             degreeCounter += 9;
             RotateTransform rotate = new RotateTransform(degreeCounter);
-            //zappers[spinner].RenderTransformOrigin = new Point(0.5, 0.5);
+            zappers[spinner].RenderTransformOrigin = new Point(0.5, 0.5);
             zappers[spinner].RenderTransform = rotate;
             RotateTransform rotate2 = new RotateTransform(degreeCounter);
-            //hitPoints[spinner].RenderTransformOrigin = new Point(0.5, 0.5);
+            rotate2.CenterY = -60;
+            rotate2.CenterX = 0;
             hitPoints[spinner].RenderTransform = rotate2;
+        }
+        public PointCollection locations()
+        {
+            PointCollection returnPoints = new PointCollection();
+            for (int i = 0; i < hitPoints.Length; i++)
+            {
+                for (int i2 = 0; i2 < hitPoints[i].Points.Count; i2++)
+                {
+                    //MessageBox.Show(hitPoints[i].Points[i2] + "");
+                    //hitPoints[i].TranslatePoint(hitPoints[i].Points[i2], canvas);
+                    //MessageBox.Show(canvas.TransformToAncestor(Window.GetWindow(canvas)).Transform(hitPoints[i].Points[i2]) + "");
+                    //MessageBox.Show(canvas.PointFromScreen(hitPoints[i].Points[i2]) + "");
+                    //convert to point relative to screen with polyline as ui element, convert to point relative to canvas
+                    Point screenPoint = hitPoints[i].PointToScreen(hitPoints[i].Points[i2]);
+                    Point canvasPoint = canvas.PointFromScreen(screenPoint);
+                    returnPoints.Add(canvasPoint);
+                    //canvas.Children.Remove//testing
+                }
+            }
+            //MessageBox.Show(returnPoints.ToString());
+            Polyline test = new Polyline();
+            test.Points = returnPoints;
+            test.Stroke = Brushes.Red;
+            test.StrokeThickness = 2;
+            Canvas.SetTop(test, 0);
+            Canvas.SetLeft(test, 0);
+            try
+            {
+                canvas.Children.Remove(test);
+            }
+            catch
+            {
+
+            }
+            //canvas.Children.Add(test);
+            return returnPoints;
         }
     }
 }

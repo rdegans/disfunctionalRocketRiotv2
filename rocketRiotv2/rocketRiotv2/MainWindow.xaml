@@ -7,6 +7,7 @@
         mc:Ignorable="d"
         Title="Rocket Riot" Height="600" Width="800">
     <Canvas x:Name="canvas">
+        <Canvas x:Name="playerCanvas" Height="600" Width="800"></Canvas>
         <StackPanel>
             <TextBox x:Name="lblOutput"/>
         </StackPanel>
